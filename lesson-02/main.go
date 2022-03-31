@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"gb-go-best-practice/lesson-02/dirscan"
+	"gb-go-best-practices/lesson-02/dirscan"
 	"log"
 	"os"
 	"os/signal"

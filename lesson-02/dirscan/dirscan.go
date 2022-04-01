@@ -15,7 +15,9 @@ const (
 )
 
 // DirScanner struct
-type DirScanner struct{}
+type DirScanner struct {
+	bufPool map[int][]byte
+}
 
 // DirName type
 type DirName [dsNameSize]int8
@@ -24,8 +26,11 @@ type DirName [dsNameSize]int8
 type FilterFunc func(*FileInfo) bool
 
 // Create function
-func Create() *DirScanner {
-	return new(DirScanner)
+func Create() (ds *DirScanner) {
+	ds = &DirScanner{
+		bufPool: make(map[int][]byte),
+	}
+	return
 }
 
 // FindFiles function
@@ -39,7 +44,7 @@ func (ds *DirScanner) FindFiles(ctx context.Context, path string, depth int, fil
 		return
 	}
 
-	scanBuffer := make([]byte, dsBufSize)
+	scanBuffer := ds.getBuf(depth)
 	var n int
 
 	for {
@@ -84,4 +89,13 @@ func (ds *DirScanner) parseDirent(ctx context.Context, buf []byte, path string, 
 		}
 	}
 	return
+}
+
+// getBuf function
+func (ds *DirScanner) getBuf(level int) []byte {
+	if _, ok := ds.bufPool[level]; !ok {
+		ds.bufPool[level] = make([]byte, dsBufSize)
+	}
+
+	return ds.bufPool[level]
 }

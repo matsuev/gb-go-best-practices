@@ -15,7 +15,7 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	fileList, err := ds.FindFiles(ctx, ".", -1, dirscan.ExtFilter(".csv", ".go"))
+	fileList, err := ds.FindFiles(ctx, ".", -1, dirscan.ExtBytesFilter(".csv", ".go"))
 	if err != nil {
 		log.Fatalln(err)
 	}

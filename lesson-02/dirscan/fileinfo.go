@@ -89,6 +89,18 @@ func (fi *FileInfo) CheckExt(ext string) bool {
 	return true
 }
 
+// CheckExtBytes function
+func (fi *FileInfo) CheckExtBytes(extBytes []byte, extLen int) bool {
+	testBuf := fi.fName[len(fi.fName)-extLen:]
+	for i := 0; i < extLen; i++ {
+		if testBuf[i] != extBytes[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 // parseName function
 func parseName(buf DirName) (result []byte) {
 	name := (*[dsNameSize]byte)(unsafe.Pointer(&buf[0]))

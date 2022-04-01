@@ -5,11 +5,39 @@ import (
 	"syscall"
 )
 
+// extInfo dtruct
+type extInfo struct {
+	extBytes []byte
+	extLen   int
+}
+
 // ExtFilter function
 func ExtFilter(ext ...string) (f FilterFunc) {
 	return func(fi *FileInfo) bool {
 		for _, e := range ext {
 			if fi.CheckExt(e) {
+				return true
+			}
+		}
+		return false
+	}
+}
+
+// ExtBytesFilter function
+func ExtBytesFilter(ext ...string) (f FilterFunc) {
+	extList := make([]extInfo, len(ext))
+
+	for i, e := range ext {
+		eb := []byte(e)
+		extList[i] = extInfo{
+			extBytes: eb,
+			extLen:   len(eb),
+		}
+	}
+
+	return func(fi *FileInfo) bool {
+		for _, e := range extList {
+			if fi.CheckExtBytes(e.extBytes, e.extLen) {
 				return true
 			}
 		}

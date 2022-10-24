@@ -1,2 +1,1 @@
-# gb-go-best-practices
-GeekBrains Golang best practices course
+# GeekBrains. Курс "Лучшие практики разработки Go-приложений"
